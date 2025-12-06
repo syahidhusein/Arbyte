@@ -5,7 +5,7 @@
   <img src="https://img.shields.io/badge/ML-XGBoost/SBERT-orange" alt="ML Badge">
 </div>
 
-# 🛰️ Arbyte: The Autonomous Job Application Assistant
+# 👩🏻‍💻 Arbyte: The Autonomous Job Application Assistant
 
 **CareerPilot AI** is an intelligent web application designed to eliminate job application fatigue. Stop sending generic resumes into the black hole. Arbyte uses advanced **Semantic Feature Engineering** and **Generative AI** to instantly tailor your resume and cover letter to specific job descriptions, predicting your match score before you even hit 'Apply'.
 
