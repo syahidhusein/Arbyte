@@ -24,11 +24,9 @@
 
 ### 🛠️ Scope and Limitations (MVP)
 
-| Feature | Current Scope (PoC) | Future Vision (V1.0) |
+| Feature | Current Scope | Future Vision (V1.0) |
 | :--- | :--- | :--- |
 | **Domain** | Strictly focused on **Tech, IT, and Software Engineering** roles. | Expand model training to include Finance, Engineering (O&G), and Healthcare. |
-| **Input** | Job Descriptions retrieved via URL scraping. Resume data is **text-only** input. | Robust PDF/DOCX file upload parser for complex resume layouts. |
-| **Frontend** | Streamlit Proof of Concept (PoC) for rapid deployment. | Dynamic, production-ready frontend using **Plotly Dash** or **React.js/FastAPI**. |
 
 ---
 
