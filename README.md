@@ -15,7 +15,7 @@
 
 ### 🌟 Features at a Glance
 
-* **🔍 AI Match Predictor:** Uses a trained **[PLACEHOLDER]** model to analyze the semantic overlap between your resume and a job description, providing a probability score of securing an interview.
+* **🔍 AI Match Predictor:** Uses a trained **Machine Learning** model to analyze the semantic overlap between your resume and a job description, providing a probability score of securing an interview.
 * **✍️ LLM Tailoring:** Automatically rewrites your resume summary, highlights, and generates a custom cover letter to align with the job posting’s most relevant keywords and requirements.
 * **📊 Application Tracker:** Stores all your application history, statuses, and the final match scores in a lightweight **SQLite** database.
 * **💾 Downloadable Artifacts:** Output tailored documents as clean, downloadable PDF files.
@@ -26,7 +26,7 @@
 
 | Feature | Current Scope | Future Vision (V1.0) |
 | :--- | :--- | :--- |
-| **Domain** | Strictly focused on **Tech, IT, and Software Engineering** roles. | Expand model training to include Finance, Engineering (O&G), and Healthcare. |
+| **Domain** | Strictly focused on **Tech, IT, and Software Engineering** roles due to dataset restrictions. | Expand model training to include Finance, Engineering (O&G), and Healthcare. |
 
 ---
 
