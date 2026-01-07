@@ -1,0 +1,43 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Character encoding - ensures special characters display correctly -->
+    <meta charset="UTF-8" />
+    
+    <!-- Makes app responsive on mobile devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Browser tab title - what users see in their browser tab -->
+    <title>👩🏻‍💻 Arbyte</title>
+    
+    <!-- SEO: Description shown in Google search results -->
+    <meta name="description" content="AI-powered resume tailoring and cover letter generation using ML-powered predictions" />
+    <meta name="author" content="Arbyte" />
+
+    <!-- Open Graph: How your app appears when shared on social media -->
+    <meta property="og:title" content="Arbyte - AI Resume Tailoring" />
+    <meta property="og:description" content="Tailor your resume with ML-powered insights and generate personalized cover letters" />
+    <meta property="og:type" content="website" />
+
+    <!-- Twitter/X specific sharing settings -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@Arbyte" />
+  </head>
+
+  <body>
+    <!-- 
+      THE ROOT CONTAINER
+      This empty div is where React will inject your entire application.
+      React calls this "mounting" - attaching the app to the DOM.
+    -->
+    <div id="root"></div>
+    
+    <!-- 
+      THE SCRIPT LOADER
+      type="module" = Modern JavaScript with import/export support
+      This loads main.tsx which bootstraps the React application
+    -->
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
