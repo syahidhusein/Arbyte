@@ -1,0 +1,406 @@
+/*
+============================================================
+TAILWIND DIRECTIVES
+============================================================
+* These import Tailwind's style layers:
+* - base: CSS reset, default styles
+* - components: Component classes (.btn, .card)
+* - utilities: Utility classes (bg-*, text-*, p-*)
+*/
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+============================================================
+LIGHT THEME VARIABLES
+============================================================
+ */
+@layer base {
+  :root {
+    /* ========== CORE BRAND COLORS ========== */
+    
+    /**
+     * BACKGROUND & FOREGROUND
+     * The canvas of the app and default text color
+     * Light: Near-white with subtle blue tint
+     */
+    --background: 210 20% 98%;
+    --foreground: 220 25% 10%;
+
+    /* ========== SURFACE COLORS ========== */
+    
+    /**
+     * CARD
+     * Used for elevated surfaces (cards, panels)
+     * Pure white for clear visual separation
+     */
+    --card: 0 0% 100%;
+    --card-foreground: 220 25% 10%;
+
+    /**
+     * POPOVER
+     * Floating elements (dropdowns, tooltips)
+     * Same as card for consistency
+     */
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 25% 10%;
+
+    /* ========== INTERACTIVE COLORS ========== */
+
+    /**
+     * PRIMARY
+     * Main brand color - Professional Blue
+     * Used for: CTAs, links, primary buttons
+     * Hue 210 = Blue
+     */
+    --primary: 210 80% 45%;
+    --primary-foreground: 0 0% 100%;
+
+    /**
+     * SECONDARY
+     * Subdued actions - Soft Blue-Gray
+     * Used for: Secondary buttons, tags
+     */
+    --secondary: 210 20% 94%;
+    --secondary-foreground: 220 25% 25%;
+
+    /**
+     * MUTED
+     * Background for subtle elements
+     * Used for: Disabled states, placeholder areas
+     */
+    --muted: 210 15% 95%;
+    --muted-foreground: 220 15% 45%;
+
+    /**
+     * ACCENT
+     * Highlight color - Teal/Green
+     * Used for: Success, positive indicators, highlights
+     * Hue 165 = Teal
+     */
+    --accent: 165 60% 42%;
+    --accent-foreground: 0 0% 100%;
+
+    /* ========== SEMANTIC STATE COLORS ========== */
+
+    /**
+     * DESTRUCTIVE - Red
+     * Used for: Delete, errors, dangerous actions
+     */
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+
+    /**
+     * SUCCESS - Green
+     * Used for: Success messages, completed states
+     */
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 100%;
+
+    /**
+     * WARNING - Amber
+     * Used for: Warnings, caution states
+     */
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+
+    /* ========== UI ELEMENT COLORS ========== */
+
+    /**
+     * BORDER & INPUT
+     * Default border color for inputs, dividers
+     */
+    --border: 214 20% 88%;
+    --input: 214 20% 88%;
+    
+    /**
+     * RING
+     * Focus ring color (accessibility)
+     * Matches primary for brand consistency
+     */
+    --ring: 210 80% 45%;
+
+    /**
+     * RADIUS
+     * Base border-radius value
+     * Creates rounded corners throughout the app
+     */
+    --radius: 0.625rem;
+
+    /* ========== APP-SPECIFIC: ML FEATURE COLORS ========== */
+
+    /**
+     * FEATURE IMPORTANCE
+     * Colors for the ML prediction feature visualization
+     * Positive = Green (helps match)
+     * Negative = Red (hurts match)
+     * Neutral = Gray (no impact)
+     */
+    --feature-positive: 142 71% 45%;
+    --feature-negative: 0 72% 51%;
+    --feature-neutral: 220 15% 60%;
+
+    /**
+     * SCORE GRADIENT
+     * For visualizing match scores (0-100%)
+     * Low (0-33%) = Red
+     * Medium (34-66%) = Amber
+     * High (67-100%) = Green
+     */
+    --score-low: 0 72% 51%;
+    --score-medium: 38 92% 50%;
+    --score-high: 142 71% 45%;
+
+    /* ========== SIDEBAR COLORS ========== */
+    --sidebar-background: 210 20% 98%;
+    --sidebar-foreground: 220 25% 25%;
+    --sidebar-primary: 210 80% 45%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 15% 92%;
+    --sidebar-accent-foreground: 220 25% 25%;
+    --sidebar-border: 214 20% 88%;
+    --sidebar-ring: 210 80% 45%;
+  }
+
+/*
+============================================================
+DARK THEME VARIABLES
+============================================================
+*/
+  .dark {
+    /* Core - Dark backgrounds, light text */
+    --background: 220 25% 8%;
+    --foreground: 210 20% 95%;
+
+    /* Surfaces - Slightly elevated from background */
+    --card: 220 25% 12%;
+    --card-foreground: 210 20% 95%;
+
+    --popover: 220 25% 12%;
+    --popover-foreground: 210 20% 95%;
+
+    /* Interactive - Brighter in dark mode for visibility */
+    --primary: 210 80% 55%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 20% 18%;
+    --secondary-foreground: 210 20% 90%;
+
+    --muted: 220 20% 18%;
+    --muted-foreground: 210 15% 60%;
+
+    --accent: 165 60% 50%;
+    --accent-foreground: 0 0% 100%;
+
+    /* States - Slightly muted in dark mode */
+    --destructive: 0 62% 45%;
+    --destructive-foreground: 0 0% 100%;
+
+    --success: 142 60% 50%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 80% 55%;
+    --warning-foreground: 0 0% 100%;
+
+    /* UI Elements */
+    --border: 220 20% 22%;
+    --input: 220 20% 22%;
+    --ring: 210 80% 55%;
+
+    /* Feature colors - Brighter for dark backgrounds */
+    --feature-positive: 142 60% 50%;
+    --feature-negative: 0 62% 55%;
+    --feature-neutral: 210 15% 55%;
+
+    /* Sidebar */
+    --sidebar-background: 220 25% 10%;
+    --sidebar-foreground: 210 20% 90%;
+    --sidebar-primary: 210 80% 55%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 20% 16%;
+    --sidebar-accent-foreground: 210 20% 90%;
+    --sidebar-border: 220 20% 20%;
+    --sidebar-ring: 210 80% 55%;
+  }
+}
+
+/* 
+============================================================
+BASE ELEMENT STYLES
+============================================================
+Global styles applied to HTML elements
+*/
+@layer base {
+  /**
+   * UNIVERSAL BORDER
+   * All elements get the default border color
+   * Ensures consistent borders when using border-* classes
+   */
+  * {
+    @apply border-border;
+  }
+
+  /**
+   * BODY STYLES
+   * - Background and text from theme
+   * - Antialiased font rendering for crisp text
+   * - OpenType features for better typography
+   */
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /**
+   * SMOOTH SCROLLING
+   * Enables smooth scroll for anchor links
+   */
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* 
+============================================================
+UTILITY CLASSES
+============================================================
+* Custom utility classes for common patterns
+*/
+@layer utilities {
+  /* ========== GRADIENT UTILITIES ========== */
+
+  /**
+   * GRADIENT-PRIMARY
+   * Blue gradient for primary elements
+   * Usage: className="gradient-primary"
+   */
+  .gradient-primary {
+    background: linear-gradient(135deg, hsl(210 80% 45%) 0%, hsl(210 80% 55%) 100%);
+  }
+
+  /**
+   * GRADIENT-ACCENT
+   * Teal gradient for accent elements
+   */
+  .gradient-accent {
+    background: linear-gradient(135deg, hsl(165 60% 42%) 0%, hsl(165 60% 52%) 100%);
+  }
+
+  /**
+   * GRADIENT-HERO
+   * Blue to teal gradient for hero sections
+   * Creates visual flow from primary to accent
+   */
+  .gradient-hero {
+    background: linear-gradient(135deg, hsl(210 80% 45%) 0%, hsl(165 60% 42%) 100%);
+  }
+
+  /* ========== TEXT GRADIENT ========== */
+
+  /**
+   * TEXT-GRADIENT-PRIMARY
+   * Apply gradient to text (headings, etc.)
+   * Uses background-clip to mask gradient to text
+   */
+  .text-gradient-primary {
+    background: linear-gradient(135deg, hsl(210 80% 45%) 0%, hsl(165 60% 42%) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* ========== GLASSMORPHISM ========== */
+
+  /**
+   * GLASS EFFECT
+   * Frosted glass appearance for overlays
+   * Requires: semi-transparent background + backdrop-blur
+   */
+  .glass {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  /* ========== FEATURE SCORE COLORS ========== */
+
+  /**
+   * SCORE BARS
+   * For ML feature importance visualization
+   * Usage: <div className="score-positive" style={{width: '80%'}} />
+   */
+  .score-positive {
+    background-color: hsl(var(--feature-positive));
+  }
+
+  .score-negative {
+    background-color: hsl(var(--feature-negative));
+  }
+
+  /* ========== CUSTOM ANIMATIONS ========== */
+
+  /**
+   * FLOAT ANIMATION
+   * Gentle floating effect for decorative elements
+   * Usage: className="animate-float"
+   */
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0px);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  /**
+   * SLOW PULSE
+   * Subtle pulsing for loading states
+   */
+  .animate-pulse-slow {
+    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  /**
+   * SLIDE UP
+   * Entry animation for elements
+   */
+  .animate-slide-up {
+    animation: slideUp 0.5s ease-out;
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* ========== UPLOAD ZONE ========== */
+
+  /**
+   * UPLOAD ZONE STATES
+   * For the resume upload component
+   * Three states: default, hover, dragging
+   */
+  .upload-zone {
+    @apply border-2 border-dashed border-primary/30 rounded-lg p-8 transition-all duration-200;
+  }
+
+  .upload-zone:hover {
+    @apply border-primary/60 bg-primary/5;
+  }
+
+  .upload-zone.dragging {
+    @apply border-primary bg-primary/10 scale-[1.02];
+  }
+}
