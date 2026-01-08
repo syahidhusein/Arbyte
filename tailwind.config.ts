@@ -1,23 +1,3 @@
-/*
-============================================================
-TAILWIND CONFIGURATION
-============================================================
- * WHY HSL(var(--variable)) PATTERN?
- * - Allows opacity modifiers: bg-primary/50
- * - Enables theme switching (light/dark mode)
- * - Single source of truth in index.css
- * 
- * USAGE IN COMPONENTS:
- * ✅ className="bg-primary text-primary-foreground"
- * ✅ className="bg-accent/80 hover:bg-accent"
- * ❌ className="bg-blue-500" (avoid hardcoded colors)
- * 
- * DEPENDENCIES:
- * - tailwindcss-animate: Provides animation utilities
- * - index.css: Defines the CSS variables we reference here
- * 
- */
-
 import type { Config } from "tailwindcss";
 
 export default {
