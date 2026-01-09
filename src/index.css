@@ -1,21 +1,7 @@
-/*
-============================================================
-TAILWIND DIRECTIVES
-============================================================
-* These import Tailwind's style layers:
-* - base: CSS reset, default styles
-* - components: Component classes (.btn, .card)
-* - utilities: Utility classes (bg-*, text-*, p-*)
-*/
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/*
-============================================================
-LIGHT THEME VARIABLES
-============================================================
- */
 @layer base {
   :root {
     /* ========== CORE BRAND COLORS ========== */
@@ -163,11 +149,12 @@ LIGHT THEME VARIABLES
     --sidebar-ring: 210 80% 45%;
   }
 
-/*
-============================================================
-DARK THEME VARIABLES
-============================================================
-*/
+  /* ============================================================
+   * SECTION 3: DARK THEME VARIABLES
+   * ============================================================
+   * Applied when .dark class is on <html>
+   * Same structure, inverted color values
+   */
   .dark {
     /* Core - Dark backgrounds, light text */
     --background: 220 25% 8%;
@@ -225,12 +212,11 @@ DARK THEME VARIABLES
   }
 }
 
-/* 
-============================================================
-BASE ELEMENT STYLES
-============================================================
-Global styles applied to HTML elements
-*/
+/* ============================================================
+ * SECTION 4: BASE ELEMENT STYLES
+ * ============================================================
+ * Global styles applied to HTML elements
+ */
 @layer base {
   /**
    * UNIVERSAL BORDER
@@ -261,12 +247,11 @@ Global styles applied to HTML elements
   }
 }
 
-/* 
-============================================================
-UTILITY CLASSES
-============================================================
-* Custom utility classes for common patterns
-*/
+/* ============================================================
+ * SECTION 5: UTILITY CLASSES
+ * ============================================================
+ * Custom utility classes for common patterns
+ */
 @layer utilities {
   /* ========== GRADIENT UTILITIES ========== */
 
