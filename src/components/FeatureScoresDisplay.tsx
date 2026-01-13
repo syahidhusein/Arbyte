@@ -20,22 +20,22 @@ const FEATURE_CONFIG = {
   resumeJdSimilarity: {
     label: 'Resume-JD Similarity',
     description: 'How well your resume matches the job description overall',
-    key: 'resumeJdSimilarity' as const,
+    key: 'Resume_JD_Sim' as const,
   },
   roleResumeSimilarity: {
     label: 'Role-Resume Match',
     description: 'How aligned your resume is with the job title/role',
-    key: 'roleResumeSimilarity' as const,
+    key: 'Role_Resume_Sim' as const,
   },
   wordOverlap: {
     label: 'Vocabulary Overlap',
     description: 'Common words between your resume and job description',
-    key: 'wordOverlap' as const,
+    key: 'Word_Overlap' as const,
   },
   techKeywordOverlap: {
     label: 'Technical Keywords',
     description: 'Technical skills and keywords from the JD in your resume',
-    key: 'techKeywordOverlap' as const,
+    key: 'Tech_Keyword_Overlap' as const,
   },
 };
 
@@ -73,7 +73,7 @@ export function FeatureScoresDisplay({
    */
   const getScoreColor = (score: number) => {
     if (score >= 0.6) return 'bg-success';
-    if (score >= 0.4) return 'bg-warning';
+    if (score <= 0.4) return 'bg-warning';
     return 'bg-destructive';
   };
 

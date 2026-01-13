@@ -108,7 +108,7 @@ export function JobUrlInput({ onSubmit, isLoading, jobPosting, error }: JobUrlIn
 
       {/* Supported sites hint */}
       <p className="text-center text-xs text-muted-foreground">
-        Supports LinkedIn, JobStreet, Indeed, and most job boards
+        Currently supports LinkedIn.com only. More sites coming soon!
       </p>
 
       {/* Error message */}

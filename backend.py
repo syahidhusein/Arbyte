@@ -13,6 +13,8 @@ import pickle as pkl
 import joblib
 from PyPDF2 import PdfReader
 from bs4 import BeautifulSoup
+import traceback
+import pandas as pd
 
 try:
     with open("data/tech_keywords.pkl", 'rb') as file:
@@ -45,8 +47,8 @@ OLLAMA_MODEL = "llama3.2"  # Change to your preferred model
 EMBEDDING_MODEL = "paraphrase-multilingual-MiniLM-L12-v2"  # Will be initialized on first use
 
 # ML Model placeholder - Load your trained model here
-ML_MODEL = "RandomForestClassifier.pkl"
-SCALER = StandardScaler()
+ML_MODEL = "src/models/RandomForestClassifier.pkl"
+SCALER = "src/models/StandardScaler.pkl"
 
 
 # ====================
@@ -162,10 +164,10 @@ def compute_features(resume_text: str, jd_text: str, role: str) -> Dict[str, flo
     tech_overlap = compute_tech_keyword_overlap(resume_text, jd_text)
     
     return {
-        'resumeJdSimilarity': resume_jd_sim,
-        'roleResumeSimilarity': role_resume_sim,
-        'wordOverlap': word_overlap,
-        'techKeywordOverlap': tech_overlap,
+        'Resume_JD_Sim': resume_jd_sim,
+        'Role_Resume_Sim': role_resume_sim,
+        'Word_Overlap': word_overlap,
+        'Tech_Keyword_Overlap': tech_overlap,
     }
 
 
@@ -174,27 +176,34 @@ def predict_with_shap(features: Dict[str, float]) -> Tuple[str, float, Dict[str,
     Runs prediction and computes SHAP values.
     """
     model = joblib.load(ML_MODEL)
-    scaler = SCALER
-    feature_array = np.array([[
-        features['resumeJdSimilarity'],
-        features['roleResumeSimilarity'],
-        features['wordOverlap'],
-        features['techKeywordOverlap']
-    ]])
+    scaler = joblib.load(SCALER)
+    # feature_array = np.array([[
+    #     features['Resume_JD_Sim'],
+    #     features['Role_Resume_Sim'],
+    #     features['Word_Overlap'],
+    #     features['Tech_Keyword_Overlap']
+    # ]])
+    feature_df = pd.DataFrame([{
+        'Resume_JD_Sim': features['Resume_JD_Sim'],
+        'Role_Resume_Sim': features['Role_Resume_Sim'],
+        'Word_Overlap': features['Word_Overlap'],
+        'Tech_Keyword_Overlap': features['Tech_Keyword_Overlap']
+    }])
     
-    scaled_features = scaler.transform(feature_array)
-    prediction = model.predict(scaled_features)[0]
-    probability = model.predict_proba(scaled_features)[0][1]
+    scaled_features = scaler.transform(feature_df)
+    scaled_features_df = pd.DataFrame(scaled_features, columns=feature_df.columns)
+    prediction = int(model.predict(scaled_features_df)[0])
+    probability = float(model.predict_proba(scaled_features_df)[0][1])
     
     explainer = shap.TreeExplainer(model)
-    shap_values = explainer.shap_values(scaled_features)[:,:,1][0]
+    shap_values = explainer.shap_values(scaled_features_df)[:,:,1][0]
     
     # Mock values for testing purposes
     # avg_score = (
-    #     features['resumeJdSimilarity'] + 
-    #     features['roleResumeSimilarity'] + 
-    #     features['wordOverlap'] + 
-    #     features['techKeywordOverlap']
+    #     features['Resume_JD_Sim'] + 
+    #     features['Role_Resume_Sim'] + 
+    #     features['Word_Overlap'] + 
+    #     features['Tech_Keyword_Overlap']
     # ) / 4
     
     # probability = min(1.0, max(0.0, avg_score + np.random.uniform(-0.1, 0.1)))
@@ -202,17 +211,21 @@ def predict_with_shap(features: Dict[str, float]) -> Tuple[str, float, Dict[str,
     
     # Mock SHAP values (replace with actual SHAP computation)
     # shap_values = {
-    #     'resumeJdSimilarity': features['resumeJdSimilarity'] - 0.5,
-    #     'roleResumeSimilarity': features['roleResumeSimilarity'] - 0.5,
-    #     'wordOverlap': features['wordOverlap'] - 0.3,
-    #     'techKeywordOverlap': features['techKeywordOverlap'] - 0.2,
+    #     'Resume_JD_Sim': features['Resume_JD_Sim'] - 0.5,
+    #     'Role_Resume_Sim': features['Role_Resume_Sim'] - 0.5,
+    #     'Word_Overlap': features['Word_Overlap'] - 0.3,
+    #     'Tech_Keyword_Overlap': features['Tech_Keyword_Overlap'] - 0.2,
     # }
     
-    # Normalize SHAP values
-    for key in shap_values:
-        shap_values[key] = shap_values[key] * 0.1
-    
-    return prediction, probability, shap_values
+    # Normalize SHAP values by absolute sum
+    abs_sum = np.sum(np.abs(shap_values))
+    shap_values = shap_values / abs_sum if abs_sum != 0 else shap_values
+    shap_dict = { 'Resume_JD_Sim': float(shap_values[0]),
+                    'Role_Resume_Sim': float(shap_values[1]),
+                    'Word_Overlap': float(shap_values[2]),
+                    'Tech_Keyword_Overlap': float(shap_values[3]) }
+
+    return prediction, probability, shap_dict
 
 
 def generate_feedback(shap_values: Dict[str, float]) -> List[Dict]:
@@ -225,17 +238,17 @@ def generate_feedback(shap_values: Dict[str, float]) -> List[Dict]:
     @return: List of feedback dicts
     """
     negative_feedbacks = {
-        'resumeJdSimilarity': 'There is low similarity between the resume and the job description',
-        'roleResumeSimilarity': 'There is low similarity between the job title (role) and the resume',
-        'wordOverlap': 'The vocabulary of the resume is too dissimilar to the job description',
-        'techKeywordOverlap': 'The resume contains too few tech-related keywords from the job description',
+        'Resume_JD_Sim': 'There is low similarity between the resume and the job description',
+        'Role_Resume_Sim': 'There is low similarity between the job title (role) and the resume',
+        'Word_Overlap': 'The vocabulary of the resume is too dissimilar to the job description',
+        'Tech_Keyword_Overlap': 'The resume contains too few tech-related keywords from the job description',
     }
     
     positive_feedbacks = {
-        'resumeJdSimilarity': 'There is high similarity between the resume and the job description',
-        'roleResumeSimilarity': 'There is good similarity between the job title (role) and the resume',
-        'wordOverlap': 'The vocabulary of the resume aligns well with the job description',
-        'techKeywordOverlap': 'The resume contains adequate tech-related keywords from the job description',
+        'Resume_JD_Sim': 'There is high similarity between the resume and the job description',
+        'Role_Resume_Sim': 'There is good similarity between the job title (role) and the resume',
+        'Word_Overlap': 'The vocabulary of the resume aligns well with the job description',
+        'Tech_Keyword_Overlap': 'The resume contains adequate tech-related keywords from the job description',
     }
     
     feedback = []
@@ -331,6 +344,7 @@ def parse_resume():
         })
         
     except Exception as e:
+        traceback.print_exc()
         return jsonify({'error': str(e)}), 500
 
 
@@ -419,6 +433,7 @@ def scrape_job():
         })
         
     except Exception as e:
+        traceback.print_exc()
         return jsonify({'error': str(e)}), 500
 
 
@@ -457,6 +472,7 @@ def predict():
         })
         
     except Exception as e:
+        traceback.print_exc()
         return jsonify({'error': str(e)}), 500
 
 
@@ -467,10 +483,10 @@ def tailor_resume():
     
     Uses SHAP feedback to guide the LLM in improving the resume.
    Feature-specific instructions are generated based on SHAP values:
-    - resumeJdSimilarity: Modify phrasing to be more semantically similar to JD
-    - roleResumeSimilarity: Explicitly include role keywords
-    - wordOverlap: Include more exact words from the JD
-    - techKeywordOverlap: Include more tech keywords from the tech_keywords list 
+    - Resume_JD_Sim: Modify phrasing to be more semantically similar to JD
+    - Role_Resume_Sim: Explicitly include role keywords
+    - Word_Overlap: Include more exact words from the JD
+    - Tech_Keyword_Overlap: Include more tech keywords from the tech_keywords list 
     
     Request: { resumeText: string, jobDescription: string, feedback: [...], shapValues: {...}, role: string }
     Response: { content: string, improvements: [...] }
@@ -481,7 +497,7 @@ def tailor_resume():
     job_description = data.get('jobDescription', '')
     feedback = data.get('feedback', [])
     shap_values = data.get('shapValues', {})
-    role = data.get('role', 'Software Engineer')
+    role = data.get('role', '')
     
     if not resume_text:
         return jsonify({'error': 'Missing resume text'}), 400
@@ -491,16 +507,16 @@ def tailor_resume():
         improvements_needed = []
         specific_instructions = []
         
-        # Check resumeJdSimilarity - negative impact means low semantic similarity
-        if shap_values.get('resumeJdSimilarity', 0) < 0:
+        # Check Resume_JD_Sim - negative impact means low semantic similarity
+        if shap_values.get('Resume_JD_Sim', 0) < 0:
             improvements_needed.append("Low semantic similarity between resume and job description")
             specific_instructions.append(
                 "CRITICAL: Modify the resume's phrasing and wording to be more semantically similar to the job description. "
                 "Use similar terminology, sentence structures, and contextual language that mirrors how the JD describes responsibilities and requirements."
             )
         
-        # Check roleResumeSimilarity - negative impact means role keywords missing
-        if shap_values.get('roleResumeSimilarity', 0) < 0:
+        # Check Role_Resume_Sim - negative impact means role keywords missing
+        if shap_values.get('Role_Resume_Sim', 0) < 0:
             improvements_needed.append(f"Missing role-specific keywords for '{role}'")
             # Extract key words from role
             role_words = role.lower().replace('-', ' ').replace('/', ' ').split()
@@ -510,8 +526,8 @@ def tailor_resume():
                 f"For example, if the role is 'Data Scientist', include phrases like 'data science', 'data-driven', 'scientific analysis', etc."
             )
         
-        # Check wordOverlap - negative impact means not enough exact word matches
-        if shap_values.get('wordOverlap', 0) < 0:
+        # Check Word_Overlap - negative impact means not enough exact word matches
+        if shap_values.get('Word_Overlap', 0) < 0:
             # Calculate words in JD that aren't in resume
             resume_words = set(resume_text.lower().split())
             jd_words = set(job_description.lower().split())
@@ -527,8 +543,8 @@ def tailor_resume():
                 f"These words appear in the job description but not in the resume - find natural ways to include them."
             )
         
-        # Check techKeywordOverlap - negative impact means missing tech keywords
-        if shap_values.get('techKeywordOverlap', 0) < 0:
+        # Check Tech_Keyword_Overlap - negative impact means missing tech keywords
+        if shap_values.get('Tech_Keyword_Overlap', 0) < 0:
             # Find tech keywords in JD that are missing from resume
             resume_lower = resume_text.lower()
             jd_lower = job_description.lower()
@@ -578,13 +594,13 @@ def tailor_resume():
         
         # Build improvements list based on what was addressed
         improvements = []
-        if shap_values.get('resumeJdSimilarity', 0) < 0:
+        if shap_values.get('Resume_JD_Sim', 0) < 0:
             improvements.append("Enhanced semantic similarity with job description phrasing")
-        if shap_values.get('roleResumeSimilarity', 0) < 0:
+        if shap_values.get('Role_Resume_Sim', 0) < 0:
             improvements.append(f"Added role-specific keywords for '{role}'")
-        if shap_values.get('wordOverlap', 0) < 0:
+        if shap_values.get('Word_Overlap', 0) < 0:
             improvements.append("Incorporated more exact words from job description")
-        if shap_values.get('techKeywordOverlap', 0) < 0:
+        if shap_values.get('Tech_Keyword_Overlap', 0) < 0:
             improvements.append("Added missing technical keywords")
         
         if not improvements:
@@ -599,6 +615,7 @@ def tailor_resume():
         })
         
     except Exception as e:
+        traceback.print_exc()
         return jsonify({'error': str(e)}), 500
 
 
@@ -627,8 +644,8 @@ def generate_cover_letter():
         specific_instructions = []
         key_points = []
         
-        # Check resumeJdSimilarity - negative impact means low semantic similarity
-        if shap_values.get('resumeJdSimilarity', 0) < 0:
+        # Check Resume_JD_Sim - negative impact means low semantic similarity
+        if shap_values.get('Resume_JD_Sim', 0) < 0:
             emphasis_areas.append("Semantic alignment with job description")
             specific_instructions.append(
                 "IMPORTANT: Use phrasing and terminology that closely mirrors the job description. "
@@ -636,8 +653,8 @@ def generate_cover_letter():
             )
             key_points.append("Aligned language with job description terminology")
         
-        # Check roleResumeSimilarity - negative impact means role not emphasized
-        if shap_values.get('roleResumeSimilarity', 0) < 0:
+        # Check Role_Resume_Sim - negative impact means role not emphasized
+        if shap_values.get('Role_Resume_Sim', 0) < 0:
             emphasis_areas.append("Role-specific focus")
             specific_instructions.append(
                 f"CRITICAL: Explicitly mention the role '{role}' and use related terminology throughout. "
@@ -646,8 +663,8 @@ def generate_cover_letter():
             )
             key_points.append(f"Emphasized {role} role-specific experience")
         
-        # Check wordOverlap - negative impact means vocabulary mismatch
-        if shap_values.get('wordOverlap', 0) < 0:
+        # Check Word_Overlap - negative impact means vocabulary mismatch
+        if shap_values.get('Word_Overlap', 0) < 0:
             # Calculate words in JD that could be highlighted
             resume_words = set(resume_text.lower().split())
             jd_words = set(job_description.lower().split())
@@ -663,8 +680,8 @@ def generate_cover_letter():
             )
             key_points.append("Incorporated key terminology from job posting")
         
-        # Check techKeywordOverlap - negative impact means missing tech keywords
-        if shap_values.get('techKeywordOverlap', 0) < 0:
+        # Check Tech_Keyword_Overlap - negative impact means missing tech keywords
+        if shap_values.get('Tech_Keyword_Overlap', 0) < 0:
             resume_lower = resume_text.lower()
             jd_lower = job_description.lower()
             jd_tech_keywords = [kw for kw in tech_keywords if kw.lower() in jd_lower]
@@ -730,6 +747,7 @@ def generate_cover_letter():
         })
         
     except Exception as e:
+        traceback.print_exc()
         return jsonify({'error': str(e)}), 500
 
 

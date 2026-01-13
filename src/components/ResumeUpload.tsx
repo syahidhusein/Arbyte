@@ -72,7 +72,7 @@ export function ResumeUpload({ onUpload, isLoading, resume, error }: ResumeUploa
             <div className="flex-1">
               <p className="font-medium text-foreground">{resume.fileName}</p>
               <p className="text-sm text-muted-foreground">
-                Resume uploaded successfully
+                Resume uploaded successfully!
               </p>
             </div>
             <Button

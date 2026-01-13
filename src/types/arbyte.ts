@@ -34,13 +34,13 @@ export interface JobPostingData {
  */
 export interface FeatureScores {
   /** Cosine similarity between resume embedding and JD embedding */
-  resumeJdSimilarity: number;
+  Resume_JD_Sim: number;
   /** Cosine similarity between role embedding and resume embedding */
-  roleResumeSimilarity: number;
+  Role_Resume_Sim: number;
   /** Word overlap ratio between resume and JD */
-  wordOverlap: number;
+  Word_Overlap: number;
   /** Technical keyword overlap ratio */
-  techKeywordOverlap: number;
+  Tech_Keyword_Overlap: number;
 }
 
 /**
@@ -48,10 +48,10 @@ export interface FeatureScores {
  * Positive values push toward "select", negative toward "reject"
  */
 export interface ShapValues {
-  resumeJdSimilarity: number;
-  roleResumeSimilarity: number;
-  wordOverlap: number;
-  techKeywordOverlap: number;
+  Resume_JD_Sim: number;
+  Role_Resume_Sim: number;
+  Word_Overlap: number;
+  Tech_Keyword_Overlap: number;
 }
 
 /**
