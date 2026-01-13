@@ -24,9 +24,11 @@
 
 ### 🛠️ Scope and Limitations (MVP)
 
-| Feature | Current Scope | Future Vision (V1.0) |
+| Feature | Current Scope | Future Vision |
 | :--- | :--- | :--- |
 | **Domain** | Strictly focused on **Tech, IT, and Software Engineering** roles due to dataset restrictions. | Expand model training to include Finance, Engineering (O&G), and Healthcare. |
+| **Dataset Quality** | The Job Descriptions in the dataset had to be LLM-Augmented due to poor quality standards, therefore is prone to hallucinations and inconsistencies. | Obtain a better and higher quality dataset to produce better ML models. |
+| **Public Accessibility** | Due to budget limits and the backend being too large (due to LLM API calls), it is **hosted through a local server tunnel**. | Increase budget to host backend on larger more capable servers for 24/7 availability. |
 
 ---
 
