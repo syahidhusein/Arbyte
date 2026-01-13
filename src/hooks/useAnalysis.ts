@@ -37,7 +37,7 @@ const initialState: AnalysisState = {
  * Configuration for the Python backend
  * IMPORTANT: Update this URL when running your backend
  */
-const BACKEND_URL = 'http://localhost:5000';
+const BACKEND_URL = 'https://scalpless-mireille-unneighborly.ngrok-free.dev ';
 
 export function useAnalysis() {
   const [state, setState] = useState<AnalysisState>(initialState);
@@ -235,32 +235,32 @@ export function useAnalysis() {
         prediction: 'reject',
         selectProbability: 0.35,
         featureScores: {
-          resumeJdSimilarity: 0.42,
-          roleResumeSimilarity: 0.55,
-          wordOverlap: 0.28,
-          techKeywordOverlap: 0.15,
+          Resume_JD_Sim: 0.42,
+          Role_Resume_Sim: 0.55,
+          Word_Overlap: 0.28,
+          Tech_Keyword_Overlap: 0.15,
         },
         shapValues: {
-          resumeJdSimilarity: -0.05,
-          roleResumeSimilarity: 0.06,
-          wordOverlap: -0.03,
-          techKeywordOverlap: -0.08,
+          Resume_JD_Sim: -0.05,
+          Role_Resume_Sim: 0.06,
+          Word_Overlap: -0.03,
+          Tech_Keyword_Overlap: -0.08,
         },
         feedback: [
           {
-            feature: 'techKeywordOverlap',
+            feature: 'Tech_Keyword_Overlap',
             impact: 'negative',
             value: -0.08,
             message: 'The resume contains too few tech-related keywords from the job description',
           },
           {
-            feature: 'resumeJdSimilarity',
+            feature: 'Resume_JD_Sim',
             impact: 'negative',
             value: -0.05,
             message: 'There is low similarity between the resume and the job description',
           },
           {
-            feature: 'roleResumeSimilarity',
+            feature: 'Role_Resume_Sim',
             impact: 'positive',
             value: 0.06,
             message: 'There is good similarity between the job title and the resume',
