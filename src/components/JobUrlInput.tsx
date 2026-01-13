@@ -79,7 +79,7 @@ export function JobUrlInput({ onSubmit, isLoading, jobPosting, error }: JobUrlIn
           <LinkIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
             type="url"
-            placeholder="Paste job posting URL (LinkedIn, JobStreet, etc.)"
+            placeholder="Paste job posting URL (LinkedIn)"
             value={url}
             onChange={(e) => setUrl(e.target.value)}
             disabled={isLoading}
