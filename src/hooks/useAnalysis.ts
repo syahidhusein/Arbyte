@@ -37,7 +37,7 @@ const initialState: AnalysisState = {
  * Configuration for the Python backend
  * IMPORTANT: Update this URL when running your backend
  */
-const BACKEND_URL = 'https://scalpless-mireille-unneighborly.ngrok-free.dev ';
+const BACKEND_URL = 'https://scalpless-mireille-unneighborly.ngrok-free.dev';
 
 export function useAnalysis() {
   const [state, setState] = useState<AnalysisState>(initialState);
